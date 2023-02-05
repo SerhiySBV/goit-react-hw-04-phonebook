@@ -1,21 +1,17 @@
 import { useState, useEffect } from 'react';
-import { nanoid } from 'nanoid';
+// import { nanoid } from 'nanoid';
 import ContactForm from 'components/ContactForm/ContactForm';
 import ContactList from 'components/ContactList/ContactList';
 import Filter from 'components/Filter/Filter';
 
 const App = () => {
-  const [contacts, setContacts] = useState(() => {
-    const parseContacts = JSON.parse(localStorage.getItem('contacts'));
-    return parseContacts !== null ? parseContacts : [];
-  });
+  const [contacts, setContacts] = useState(
+    () => JSON.parse(window.localStorage.getItem('contacts')) ?? []
+  );
   const [filter, setFilter] = useState('');
 
   const addSubmitUserData = values => {
-    console.log('in addSubmitUserData', values);
-    values.id = nanoid();
     if (checkContacts(contacts, values)) {
-      console.log('in if addSubmitUserData');
       return alert(`${values.name} is already in contacts`);
     }
 
@@ -30,6 +26,7 @@ const App = () => {
     setContacts(prevState =>
       prevState.filter(contact => contact.id !== contactId)
     );
+    setFilter('');
   };
   const changeFilter = event => {
     setFilter(event.currentTarget.value);
